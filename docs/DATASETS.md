@@ -202,21 +202,7 @@ The reported SHA-256 value should match the audited archive hash above. Do not c
 
 ---
 
-## 6. Public-release checklist
-
-Before making the repository public, confirm that:
-
-- [ ] the Chinese source citation and access route are documented;
-- [ ] Chinese data collection/access terms and redistribution rights are verified;
-- [ ] ethics/privacy statements are factually supported;
-- [ ] no raw posts, identifiers, coordinates, profiles, comments, annotator-response files, archives, or checkpoints are tracked by Git;
-- [ ] the source/processed-count provenance is reconciled or explicitly retained as separate pipeline stages;
-- [ ] the external dataset is obtained from its original repository rather than redistributed here; and
-- [ ] displayed aggregate counts and hashes match the frozen release artifacts.
-
----
-
-## 7. Citation
+## 6. Citation
 
 For the external English dataset, cite:
 
