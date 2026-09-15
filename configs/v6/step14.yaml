@@ -1,0 +1,71 @@
+schema_version: 1
+
+v6:
+  step14:
+    implementation_version: v6_1_step14_primary_parameter_sensitivity_reporting_r3
+    scope: posthoc_reporting_of_frozen_pretest_parameter_sensitivity_no_new_evaluation
+
+    prerequisites:
+      step04r2:
+        implementation_version: v6_step4r2_hierarchical_city_backoff_gate_r1
+        status: PASS
+        scope: grouped_original_train_city_backoff_revision_no_validation_test_or_comparators
+        data_key: 7774658044d3e297ed5bff31a45bcad5221228a53fe48fd5aabacebf12778c2d
+        official_commit: 8ac3592165cc7851676be2776b314eb6e44e9388
+        folds: [0, 1, 2, 3, 4]
+        candidate_rhos: [0.10, 0.20, 0.35]
+        selected_rho: 0.35
+        validation_documents_used: 0
+        test_documents_used: 0
+
+      step06r2:
+        implementation_version: v6_1_step6r2_spent_validation_development_recovery_r1
+        status: PASS
+        readiness: READY_FOR_V6_1_FINAL_REFIT_AND_ONE_SHOT_TEST
+        validation_status: SPENT_DEVELOPMENT
+        data_key: 7774658044d3e297ed5bff31a45bcad5221228a53fe48fd5aabacebf12778c2d
+        official_commit: 8ac3592165cc7851676be2776b314eb6e44e9388
+        test_documents_used: 0
+        candidate_rows: 18
+        seeds: [20260910, 20270910, 20280910]
+        prototype_quotas: [8, 9, 10]
+        calibrations: [native_decoder, training_moment_match]
+        selected_candidate: quota_10__training_moment_match
+
+    reporting:
+      aggregation: median_with_minimum_and_maximum
+      figure: paper/figure_primary_parameter_sensitivity.svg
+      figure_caption: paper/figure_primary_parameter_sensitivity_caption.md
+      paper_table_markdown: paper/table_primary_parameter_sensitivity.md
+      q_calibration_table_csv: supplement/q_calibration_sensitivity.csv
+      q_candidate_cells_csv: supplement/q_calibration_candidate_cells.csv
+      rho_table_csv: supplement/rho_sensitivity.csv
+      parameters:
+        - graph_core_coverage_q
+        - pooled_backoff_weight_rho
+        - decoder_calibration
+      q_endpoints:
+        - validation_npmi_full
+        - validation_cv_full
+        - full_macro_city_nll
+        - validation_topic_diversity_full
+        - validation_top_word_redundancy_full
+      rho_endpoint: pooled_backoff_macro_city_nll
+
+    interpretation:
+      analysis_status: disclosed_posthoc_rendering_of_two_frozen_pretest_development_studies
+      joint_q_rho_factorial_claim_allowed: false
+      independent_confirmation_claim_allowed: false
+      final_model_change_allowed: false
+      test_robustness_claim_allowed: false
+
+    policy:
+      model_fit_allowed: false
+      optimizer_steps_allowed: false
+      new_evaluation_allowed: false
+      validation_reopen_allowed: false
+      test_access_allowed: false
+      comparator_access_allowed: false
+      hyperparameter_selection_allowed: false
+      final_model_change_allowed: false
+      unfavorable_candidate_omission_allowed: false

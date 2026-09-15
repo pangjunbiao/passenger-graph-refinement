@@ -1,0 +1,6 @@
+# Do not run pip install for Step 3.
+#
+# The orchestration command continues to use the already verified V6 Python.
+# The official EnCOT smoke is launched in the exact pre-existing V4 cached
+# legacy runtime, which Step 3 verifies but never creates or modifies.
+

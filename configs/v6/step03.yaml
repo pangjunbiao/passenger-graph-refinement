@@ -1,0 +1,114 @@
+schema_version: 1
+
+v6:
+  step3:
+    scope: official_encot_source_runtime_adapter_and_training_smoke_no_quality_selection
+    implementation_version: v6_step3_official_encot_exact_bridge_r1
+
+    prerequisite:
+      status: PASS
+      readiness: READY_FOR_V6_STEP3_OFFICIAL_ENCOT_REPRODUCTION
+      implementation_version: v6_step2_data_evaluator_firewall_r1
+      data_key: 7774658044d3e297ed5bff31a45bcad5221228a53fe48fd5aabacebf12778c2d
+
+    # Resolved relative to the V6 root. Only frozen development artifacts are
+    # audited. Real model fitting in this stage uses the 620 training rows only.
+    source_project_root: ../SC-HTM
+    cities: [beijing, shanghai, xiamen]
+    embedding_norm_tolerance: 0.0001
+
+    official_source:
+      method: EnCOT
+      repository: https://github.com/manhdo249/EnCOT
+      paper: https://aclanthology.org/2025.findings-acl.398/
+      commit: 8ac3592165cc7851676be2776b314eb6e44e9388
+      git_tree: 4be831bd0ffb56a912af48cf980ec3fc9cc472dc
+      redistribute_source_in_v6_zip: false
+      execute_official_main_or_shell_scripts: false
+      required_files_sha256:
+        topmost/models/NewMethod/NewMethod.py: 11fc37784add0634083cd6e96753d7e10814336972cff14d22fd9c9ad4121d2a
+        topmost/models/NewMethod/ECR.py: ba53afbb7aef54c976cf28fca9d321a0b275eb26e99881cc4e0d7ac5a0efa438
+        topmost/models/NewMethod/_ETP.py: 77add3c26deacbf8fe252ea331c583e80dfdd137faa9cdb8fc5c22d7051f65f6
+        topmost/models/NewMethod/_model_utils.py: dafd02ddbc657f030ee2dbbf037063e8b4af8139e6c4bc1945c947583cdee75e
+        topmost/trainers/basic_trainer.py: 1e81a8f24d529e7a17cfd356d1e8a99d823f7e25f85a2eb1427745bd7304ec43
+        topmost/data/basic_dataset.py: 78f011301fc61b0034d648c60ef4e2162fdc2691f640ef620595d38a1d122c0c
+        main.py: ea24d440377231279fd94d0025fd34577ead6542827e93c724c571383f5fee1f
+        requirements.txt: 12f3bb51c75d3c85ef56f1907469ca0d4c701c1214dd653685dc6e5fad699d62
+
+    # This is the exact legacy CUDA environment already created by the V4
+    # official-SOTA setup. Step 3 only locates and verifies it. It never creates
+    # an environment and never installs, upgrades, or removes a package.
+    runtime:
+      creation_or_installation_allowed: false
+      python_major_minor: [3, 10]
+      require_cuda: true
+      packages:
+        torch: 2.4.1
+        torchvision: 0.19.1
+        numpy: 1.26.3
+        scipy: 1.10.1
+        scikit-learn: 1.5.1
+        sentence-transformers: 2.7.0
+        gensim: 4.3.3
+        tqdm: 4.66.5
+        wandb: 0.18.1
+        topmost: 0.0.5
+        geomloss: 0.2.6
+
+    global_context:
+      algorithm: sklearn.cluster.KMeans
+      fit_partition: original_training_only
+      heldout_assignment: nearest_frozen_training_centroid
+      clusters: 40
+      n_init: 10
+      seed: 20260909
+      labels_used: false
+
+    official_parent:
+      topics: 10
+      num_clusters: 50
+      epochs_smoke_only: 3
+      batch_size: 200
+      learning_rate: 0.002
+      dropout: 0.0
+      beta_temp: 0.2
+      weight_loss_ECR: 60.0
+      weight_ot_doc_cluster: 1.0
+      weight_ot_topic_cluster: 1.0
+      sinkhorn_alpha: 20.0
+      sinkhorn_max_iter: 100
+      alpha_noise: 0.001
+      alpha_augment: 0.05
+      pretrained_word_embeddings: frozen_multilingual_e5_vocabulary_embeddings
+      embedding_width: derive_and_require_768
+      seed: 20260909
+
+    parity:
+      device: cpu
+      absolute_tolerance: 0.000005
+      compare_forward_components: true
+      compare_one_adam_step: true
+      require_exact_extensions_off_parent_identity: true
+
+    corrected_backbone_interface:
+      official_affinity_normalization_axis: topics_for_each_word
+      official_document_topic_representation: elementwise_global_local_product_not_renormalized
+      displayed_topic_distribution: row_normalized_official_affinity_for_ranking_only
+      lexical_rank_score: standardized_log_row_normalized_affinity
+      city_residual_insertion: before_official_topic_axis_softmax
+      city_residual_identifiability: center_over_topics_then_weighted_center_over_cities
+      parent_identity: alpha_zero_equals_official_encot_decoder_exactly
+      predictive_scoring: exact_native_decoder_probabilities_inferred_from_observed_half
+
+    prohibited:
+      validation_rows_used_for_model_fit: 0
+      validation_quality_metrics_computed: 0
+      test_counts_accessed: 0
+      test_text_accessed: 0
+      human_labels_accessed: 0
+      previous_quality_metrics_accessed: 0
+      baseline_outputs_accessed: 0
+      sota_outputs_accessed: 0
+      hyperparameter_selection: 0
+      official_shell_scripts_executed: 0
+      package_install_commands_executed: 0

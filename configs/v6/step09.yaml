@@ -1,0 +1,62 @@
+schema_version: 1
+v6:
+  step9:
+    implementation_version: v6_1_step9_fair_comparators_r2
+    scope: frozen_fair_established_and_official_recent_comparators
+    prerequisite:
+      step8_readiness: READY_FOR_V6_1_STEP9_FAIR_COMPARATORS
+      step8_job_identity: 46c2e82e988edb9db550b760706b77c7fc7848d58229163af7a8bacbd0bcfcc5
+      step8_completion_identity: 10f67505c93fff51d6f793c4f960a2d5ac3155f517c0f34656de2f32c2bf1ab4
+      step9_handoff_identity: 071e88897c15ff9956f149910fc8469d13d86ae1b0485a6af533169e9e3b7fb1
+      step7_freeze_identity: 2ea097a4b05f3fd25d56bc976686a89a4c405fd7720f8929cc44310e609b11a3
+    source_project_root: ../SC-HTM
+    topics: 10
+    seeds: [101, 211, 307, 401, 503, 601, 701, 809, 907, 1009]
+    data:
+      fit_partition: 620_original_train_plus_75_spent_validation
+      fit_documents: 695
+      vocabulary: 1148
+      quality_reference: same_695_document_final_fit_counts
+      predictive_inference: exact_step8_observed_half_only
+      predictive_scoring: exact_step8_target_half_only
+      contextual_adapter: count_weighted_frozen_vocabulary_embeddings
+      contextual_adapter_fit_on_test: false
+    established:
+      lda: {maximum_iterations: 100, maximum_doc_iterations: 100, document_tolerance: 0.001}
+      nmf: {initialization: nndsvdar, maximum_iterations: 500, tolerance: 0.0001}
+      gsdmm: {alpha: 0.1, beta: 0.01, maximum_iterations: 100, stable_iterations: 5}
+      btm: {alpha: 5.0, beta: 0.01, window_size: 15, maximum_iterations: 100, stable_iterations: 3}
+      bertopic: {reduced_dimensions: 5, kmeans_starts: 10, kmeans_maximum_iterations: 300, top_n_words: 10}
+      combinedtm: {model_type: prodLDA, hidden_sizes: [100, 100], activation: softplus, dropout: 0.2, learn_priors: true, batch_size: 64, learning_rate: 0.002, momentum: 0.99, epochs: 100, theta_samples: 20}
+    recent_sota:
+      fastopic: {epochs: 200, learning_rate: 0.002, DT_alpha: 3.0, TW_alpha: 2.0, theta_temp: 1.0, normalize_embeddings: false}
+      glocom: {epochs: 200, batch_size: 200, learning_rate: 0.002, aug_coef: 0.5, prior_var: 0.1, weight_loss_ECR: 60.0, global_context_clusters: 40}
+      encot: {epochs: 200, batch_size: 200, learning_rate: 0.002, dropout: 0.0, beta_temp: 0.2, weight_loss_ECR: 60.0, weight_ot_doc_cluster: 1.0, weight_ot_topic_cluster: 1.0, sinkhorn_alpha: 20.0, sinkhorn_max_iter: 100, alpha_noise: 0.001, alpha_augment: 0.05, num_clusters: 50, global_context_clusters: 40}
+      neuromax: {epochs: 500, batch_size: 200, learning_rate: 0.002, lr_scheduler: StepLR, lr_step_size: 125, dropout: 0.2, beta_temp: 0.2, weight_loss_ECR: 40.0, weight_loss_GR: 1.0, alpha_ECR: 20.0, alpha_GR: 5.0, weight_loss_InfoNCE: 50.0, sinkhorn_max_iter: 1000, num_groups: 4}
+    evaluation:
+      top_words: 10
+      c_v_window_size: 110
+      c_v_gamma: 1.0
+      probability_floor: 1.0e-12
+      primary_predictive_aggregation: equal_city_macro_nll
+      secondary_predictive_aggregation: micro_nll
+    statistics:
+      bootstrap_resamples: 10000
+      bootstrap_seed: 20260909
+      confidence_level: 0.95
+      paired_test: exact_two_sided_signed_rank
+      multiplicity: holm_within_metric
+      alpha: 0.05
+    policy:
+      install_or_upgrade_torch: false
+      reuse_v4_numeric_results: false
+      model_selection_from_comparators: false
+      drop_failed_seeds: false
+      target_half_available_to_fit_or_inference: false
+      labels_available: false
+      requirement_names_available: false
+      v6_model_change_allowed: false
+      target_or_city_serialized_to_comparator_input: false
+      pseudo_nll_for_nonprobabilistic_methods: false
+      exact_runtime_version_and_api_preflight: true
+      native_decoder_probabilities_for_neural_models: true

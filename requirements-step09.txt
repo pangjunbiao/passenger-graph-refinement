@@ -1,0 +1,7 @@
+# Step 9 reuses the already configured V4/V6 environments.
+# Do not install or upgrade torch, torchvision, torchaudio, or CUDA.
+numpy==1.26.4
+scipy>=1.10,<1.13
+pandas>=2.0,<2.3
+PyYAML>=6.0
+scikit-learn>=1.2,<1.7

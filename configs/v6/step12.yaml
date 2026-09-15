@@ -1,0 +1,97 @@
+schema_version: 1
+
+v6:
+  step12:
+    implementation_version: v6_1_step12_human_case_finalization_r3
+    scope: frozen_three_annotator_case_study_finalization_no_new_human_input
+
+    prerequisite:
+      step10_implementations:
+        - v6_1_step10_reporting_validity_gate_r2
+        - v6_1_step10_reporting_validity_gate_r3
+      step10_allowed_status: [PREPARATION_PASS, PASS]
+      step10_human_status: COMPLETE_REPORTED_AS_OBSERVED
+      step10_required_hard_checks: 11
+      step11_implementation: v6_1_step11_distinct_evidence_synthesis_r2
+      step11_status: PASS
+      step11_preregistration_identity: 6f65f886481ebdf06412ac24a484cae0e45b206f8c10ee3817602ce36ff62a73
+      step7_freeze_identity: 2ea097a4b05f3fd25d56bc976686a89a4c405fd7720f8929cc44310e609b11a3
+
+    source_project_root: ../SC-HTM
+    expected_corpus:
+      modeled_documents: 772
+      development_documents: 695
+      test_documents: 77
+      cities: [beijing, shanghai, xiamen]
+
+    human_evaluation:
+      annotators: 3
+      word_intrusion_items: 50
+      word_intrusion_ratings: 150
+      topic_items: 10
+      topic_ratings: 30
+      case_items: 30
+      case_ratings: 90
+      bootstrap_seed: 20260912
+      bootstrap_replicates: 10000
+      service_categories:
+        - operations_reliability
+        - safety_security
+        - accessibility_inclusion
+        - comfort_environment
+        - staff_conduct
+        - information_communication
+        - fare_payment_digital
+        - other
+
+    case_study:
+      minimum_service_need_yes_votes: 2
+      minimum_median_topic_fit: 4
+      selected_cases_per_city: 1
+      selection_order:
+        - highest_median_topic_fit
+        - highest_service_need_yes_fraction
+        - highest_frozen_lexical_relevance
+        - lexicographically_smallest_item_id
+      topic_rows: 10
+      selected_case_rows: 3
+      free_text_reporting: retain_all_three_original_responses_without_synthesis
+      categorical_reporting: two_of_three_majority_else_no_consensus
+      english_translation_required_for_step12_pass: false
+      unverified_machine_translation_allowed: false
+
+    protocol_amendment:
+      status: disclosed_post_collection_operational_amendment
+      reason: preregistered_fourth_adjudicator_unavailable
+      original_case_selection_rule_changed: false
+      original_numeric_ratings_changed: false
+      original_human_responses_changed: false
+      new_human_judgments_collected: false
+      replacement: report_all_three_original_free_text_responses_without_consensus
+
+    cross_city_descriptor_support:
+      partition: development_only_train_or_validation
+      support_definition: observed_in_at_least_one_document_in_each_of_three_cities
+      performance_or_transfer_claim_allowed: false
+
+    policy:
+      model_fit_allowed: false
+      optimizer_steps_allowed: false
+      architecture_change_allowed: false
+      hyperparameter_change_allowed: false
+      preprocessing_change_allowed: false
+      comparator_refit_allowed: false
+      frozen_result_change_allowed: false
+      seed_selection_allowed: false
+      test_text_access_allowed: false
+      forced_consensus_allowed: false
+      original_response_edit_allowed: false
+      unadjudicated_free_text_presented_as_consensus_allowed: false
+      cross_city_occurrence_presented_as_transfer_allowed: false
+      unfavorable_case_cell_omission_allowed: false
+      new_human_input_allowed: false
+      synthetic_human_response_allowed: false
+      llm_presented_as_human_allowed: false
+      generated_consensus_text_allowed: false
+      post_response_case_or_metric_selection_allowed: false
+      editorial_machine_translation_used_as_evidence_allowed: false

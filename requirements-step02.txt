@@ -1,0 +1,6 @@
+# Step 2 uses the same Python interpreter as Step 1. Do not reinstall Torch or CUDA.
+numpy>=1.26,<2
+scipy>=1.10,<2
+pandas>=2.0,<3
+PyYAML>=6,<7
+pytest>=7,<9

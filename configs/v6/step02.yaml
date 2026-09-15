@@ -1,0 +1,112 @@
+schema_version: 1
+
+v6:
+  step2:
+    scope: immutable_train_validation_contract_no_model_training_no_quality_selection
+    implementation_version: v6_step2_data_evaluator_firewall_r1
+
+    # Resolved relative to the V6 root. This reuses data from the separate V4
+    # project and never writes into it.
+    source_project_root: ../SC-HTM
+    cities: [beijing, shanghai, xiamen]
+    embedding_norm_tolerance: 0.0001
+
+    development_folds:
+      construction: deterministic_city_stratified_duplicate_group_greedy
+      population: original_training_partition_only
+      folds: 5
+      seed: 20260908
+
+    document_completion:
+      construction: post_id_hashed_token_binomial_with_nonempty_repair
+      seed: 20260908
+      observed_fraction: 0.50
+      minimum_total_tokens: 2
+      inference_input: observed_counts_only
+      scoring_input: target_counts_only
+
+    evaluator:
+      top_words: 10
+      c_v:
+        implementation: one_set_indirect_cosine_roder_style_v6
+        window_size: 110
+        gamma: 1.0
+        zero_joint_npmi: -1.0
+        absent_reference_word_confirmation: 0.0
+        reference: fold_evaluation_counts_only
+      npmi:
+        implementation: binary_document_npmi_without_smoothing
+        zero_joint_value: -1.0
+        absent_reference_pair_value: -1.0
+        reference: fold_evaluation_counts_only
+      document_completion_nll:
+        probability_floor: 1.0e-12
+        infer_theta_from: observed_half_only
+        score: target_half_only
+      topic_diversity_at_10:
+        direction: higher
+      top_word_redundancy_at_10:
+        implementation: mean_pairwise_jaccard
+        direction: lower
+      topic_stability:
+        implementation: optimal_topic_matching_top_word_jaccard
+        direction: higher
+
+    # Frozen before any V6 real-data quality run. These are practical-effect
+    # gates, not promises that an empirical comparison will pass.
+    development_gates:
+      rule: improve_at_least_one_co_primary_and_be_noninferior_on_the_other
+      co_primary_superiority_margin:
+        c_v_at_10: 0.010
+        npmi_at_10: 0.010
+      co_primary_noninferiority_margin:
+        c_v_at_10: 0.010
+        npmi_at_10: 0.010
+      maximum_completion_nll_regression: 0.020
+      minimum_topic_diversity_at_10: 0.850
+      maximum_top_word_redundancy_at_10: 0.150
+      minimum_topic_stability: 0.600
+      lexical_module_target:
+        metric: npmi_at_10
+        minimum_paired_improvement: 0.010
+        c_v_noninferiority_margin: 0.010
+      city_module_target:
+        metric: city_stratified_document_completion_nll
+        minimum_paired_reduction: 0.005
+        require_nonzero_residual_activity: true
+
+    headline_ablations:
+      - id: full_v6
+        intervention: both_proposed_extensions_active
+        retrain_from_scratch: true
+      - id: without_city_residual
+        intervention: alpha_equals_zero_with_lexical_extension_active
+        target: city_stratified_document_completion_nll
+        retrain_from_scratch: true
+      - id: without_rank_aware_lexical
+        intervention: lambda_lexical_equals_zero_with_city_residual_active
+        target: npmi_at_10_then_c_v_at_10
+        retrain_from_scratch: true
+      - id: official_encot_parent
+        intervention: both_proposed_extensions_off
+        target: incremental_joint_value
+        retrain_from_scratch: true
+
+    sensitivity_only:
+      - independent_city_decoders_instead_of_partial_pooling
+      - fixed_gate_instead_of_adaptive_gate
+      - lexical_temperature
+      - city_residual_rank
+
+    multiple_testing:
+      paired_unit: identical_fold_and_seed
+      interval: paired_hierarchical_bootstrap
+      familywise_correction: holm
+      alpha: 0.05
+
+    official_parent:
+      method: EnCOT
+      repository: https://github.com/manhdo249/EnCOT
+      paper: https://aclanthology.org/2025.findings-acl.398/
+      source_policy: official_repository_exact_commit_only
+      parity_before_extension: true

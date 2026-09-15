@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "registration_status": "FROZEN_BEFORE_FIRST_SEMANTIC_VALIDATION_ACCESS",
+  "stage": "V6 Step 6",
+  "implementation_version": "v6_step6_one_shot_validation_freeze_gate_r1",
+  "purpose": "Confirm that the already-selected R5 architecture transfers from grouped training-fold development to the untouched validation partition.",
+  "decision_boundary": {
+    "candidate_count": 1,
+    "selected_city_mixture_weight": 0.35,
+    "selected_prototype_quota": 10,
+    "architecture_changes_allowed": false,
+    "hyperparameter_search_allowed": false,
+    "seed_selection_allowed": false,
+    "validation_early_stopping_allowed": false,
+    "test_access_allowed": false,
+    "baseline_or_sota_access_allowed": false,
+    "on_failure": "STOP_CURRENT_V6; do not revise against this validation partition or open test/comparators"
+  },
+  "fit_and_evaluation": {
+    "training_partition": "all 620 original training documents",
+    "validation_partition": "73 frozen completion-eligible rows from the original 75-document validation partition",
+    "validation_target_tokens": 310,
+    "parent_fit_seeds": [20260910, 20270910, 20280910],
+    "parent_epochs": 120,
+    "parent_learning_rate": 0.002,
+    "parent_batch_size": 200,
+    "stopping_rule": "fixed epochs only",
+    "validation_semantic_open": "after all three train-only checkpoints are saved and hashed",
+    "variants_per_seed": [
+      "full_graph_plus_city",
+      "without_graph_city_retained",
+      "without_city_graph_retained",
+      "matched_pooled_backoff_graph_retained",
+      "exact_official_parent"
+    ],
+    "neural_fits": 3,
+    "paired_variant_evaluations": 15
+  },
+  "component_hypotheses": {
+    "graph_projection_primary_targets": [
+      "validation NPMI@10",
+      "validation C_v@10",
+      "validation zero-joint-pair count",
+      "topic stability"
+    ],
+    "city_backoff_primary_target": "macro-city validation document-completion NLL",
+    "complete_model_predictive_requirement": "positive validation NLL reduction against the exact official EnCOT parent",
+    "graph_projection_nll": "mandatory reported trade-off; not a graph survival criterion"
+  },
+  "thresholds": {
+    "expected_seed_count": 3,
+    "minimum_positive_seed_fraction": 0.6666666666666666,
+    "minimum_median_validation_npmi_improvement": 0.05,
+    "minimum_median_validation_cv_improvement": 0.02,
+    "minimum_median_zero_joint_pair_reduction": 0.0,
+    "minimum_median_city_vs_without_city_reduction": 0.05,
+    "minimum_median_city_vs_pooled_reduction": 0.005,
+    "minimum_median_full_vs_parent_reduction": 0.05,
+    "minimum_median_training_reference_npmi": -0.05,
+    "minimum_median_training_reference_cv": 0.48,
+    "minimum_validation_topic_diversity": 0.85,
+    "maximum_validation_top_word_redundancy": 0.15,
+    "minimum_full_topic_stability": 0.2,
+    "maximum_stability_regression_vs_graph_removed": 0.02,
+    "minimum_displayed_train_support_fraction": 0.85,
+    "minimum_displayed_graph_support_fraction": 0.8,
+    "minimum_displayed_positive_graph_pair_fraction": 0.15,
+    "minimum_prototype_core_recall": 1.0,
+    "maximum_probability_sum_error": 1e-06,
+    "maximum_nonprototype_change": 0.0,
+    "maximum_projection_column_sum_error": 1e-06,
+    "minimum_projection_probability": 0.0,
+    "maximum_projection_optimality_error": 1e-12,
+    "maximum_changed_columns": 100
+  },
+  "claim_boundary": "A pass authorizes final train-plus-validation fitting and later one-time test confirmation. It is not a baseline/SOTA result and does not prove publication superiority."
+}

@@ -1,0 +1,100 @@
+schema_version: 1
+
+v6:
+  step4:
+    scope: grouped_original_train_city_residual_gate_no_validation_test_or_comparators
+    implementation_version: v6_step4_city_residual_grouped_mechanistic_gate_r1
+
+    prerequisite:
+      implementation_version: v6_step3_official_encot_exact_bridge_r1
+      data_key: 7774658044d3e297ed5bff31a45bcad5221228a53fe48fd5aabacebf12778c2d
+      official_commit: 8ac3592165cc7851676be2776b314eb6e44e9388
+
+    runtime:
+      creation_or_installation_allowed: false
+      source: exact_interpreter_recorded_by_passing_step3
+
+    cities: [beijing, shanghai, xiamen]
+    development_folds: [0, 1, 2, 3, 4]
+
+    global_context:
+      algorithm: sklearn.cluster.KMeans
+      clusters: 40
+      n_init: 10
+      seed: 20260909
+      fit_partition: corresponding_fold_training_side_only
+      representation: l2_normalized_count_weighted_frozen_vocabulary_embeddings
+      heldout_assignment: nearest_frozen_fold_training_centroid_from_observed_counts_only
+
+    model:
+      topics: 10
+      encoder_units: 200
+      num_clusters: 50
+      dropout: 0.0
+      beta_temp: 0.2
+      weight_loss_ECR: 60.0
+      weight_ot_doc_cluster: 1.0
+      weight_ot_topic_cluster: 1.0
+      sinkhorn_alpha: 20.0
+      sinkhorn_max_iter: 100
+      alpha_noise: 0.001
+      alpha_augment: 0.05
+      frozen_word_feature_width: 768
+
+    training:
+      seed: 20260910
+      parent_epochs: 120
+      parent_learning_rate: 0.002
+      batch_size: 200
+      selection_from_heldout_fold: false
+      stopping_rule: fixed_epochs_only
+
+    city_residual:
+      residual_scale: 1.0
+      gate_initial_logit: 0.0
+      epochs: 60
+      batch_size: 200
+      learning_rate: 0.02
+      weight_decay: 0.0001
+      gradient_clip_norm: 1000.0
+      lambda_pooling: 0.05
+      lambda_gate: 0.002
+      epsilon: 1.0e-12
+      initializer:
+        role: fold_training_only_empirical_bayes_warm_start_not_extra_module
+        shrinkage: 0.50
+        development_candidate_shrinkages_reviewed_before_neural_quality: [0.25, 0.50, 0.75]
+        selection_metric: mean_crossfitted_model_free_training_partition_nll_reduction
+        pseudocount: 0.50
+        strength: 0.35
+        projection_ridge: 0.05
+        log_odds_clip: 1.50
+        heldout_rows_used: 0
+
+    evaluation:
+      top_words: 10
+      c_v_window_size: 110
+      c_v_gamma: 1.0
+      probability_floor: 1.0e-12
+      inference_batch_size: 200
+      coherence_reference: corresponding_fold_evaluation_counts_only
+      completion_inference: observed_half_only
+      completion_scoring: target_half_only
+      city_aggregation: equal_weight_macro_average_of_city_specific_token_nll
+
+    gates:
+      identity_tolerance: 0.000005
+      centering_tolerance: 0.00005
+      activity_floor: 0.000001
+      minimum_model_free_signal: 0.005
+      minimum_paired_nll_reduction: 0.005
+      minimum_positive_fold_fraction: 0.80
+
+    prohibited:
+      validation_rows_used: 0
+      test_counts_or_text_used: 0
+      human_labels_used: 0
+      previous_model_quality_used: 0
+      baseline_outputs_used: 0
+      sota_outputs_used: 0
+      package_install_commands: 0

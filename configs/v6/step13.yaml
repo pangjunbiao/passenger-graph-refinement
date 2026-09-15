@@ -1,0 +1,175 @@
+schema_version: 1
+
+v6:
+  step13:
+    implementation_version: v6_1_step13_external_temporal_replication_r1
+    scope: preregistered_external_cross_language_architecture_replication
+
+    dataset:
+      dataset_id: etu_transit_tweet_data_2020_2023
+      archive_path: inputs/v6/step13/Transit-Tweet-Data-main.zip
+      archive_sha256: 47910a2c136e61b54605ebc23d81d6cdbc58aa9bc00633f3b58144ec620d159e
+      csv_member: Transit-Tweet-Data-main/Transit Tweet Data.csv
+      csv_sha256: 3e386a2d6e0ba4023559992415880687326a43c86a7be36d226d960e1a39ec9d
+      expected_nonblank_records: 559
+      expected_date_min_utc: "2020-01-01T01:55:17+00:00"
+      expected_date_max_utc: "2023-03-31T12:43:02+00:00"
+      citation: "Etu et al. (2025), Learning about the Transit Passenger Experience from Microblogging Posts, https://doi.org/10.32866/001c.140966"
+      independence_from_internal_corpus: true
+      label_columns_available: false
+      coordinate_policy: source_coordinates_never_loaded_into_model_or_exported
+
+    split:
+      ordering: parsed_utc_timestamp_then_original_csv_row
+      ordering_fields: [parsed_utc_timestamp, original_csv_row]
+      original_train_documents: 391
+      spent_validation_documents: 84
+      final_fit_documents: 475
+      heldout_test_documents: 84
+      validation_used_for_selection: false
+      final_fit_construction: chronological_train_plus_spent_validation
+      test_opening: once_after_protocol_and_fit_freeze
+
+    preprocessing:
+      language: English
+      unicode_normalization: NFKC
+      case: lowercase
+      token_pattern: "[a-z]+(?:'[a-z]+)?"
+      apostrophes: remove_after_tokenization
+      minimum_token_characters: 2
+      stopword_source: sklearn.feature_extraction.text.ENGLISH_STOP_WORDS
+      stopword_set_sha256: 51fe0dd02e69a4d23ad15c46dcdf9f93b9235f3442487a166f66c0def5b15c58
+      social_stopwords: [amp, rt, im, ive, id, ill, dont, didnt, doesnt, cant, couldnt, wont, wouldnt, isnt, arent, wasnt, werent, youre, theyre, thats, theres, heres, just, like, lol, omg, wtf, gonna, gotta, yeah, yall, u, ur]
+      placeholder_map:
+        agency: agency
+        agency_name: agency
+        bus_number: vehicle
+        train_number: vehicle
+        line_number: route
+        location_name: location
+      minimum_fit_document_frequency: 2
+      maximum_vocabulary: 1148
+      vocabulary_order: descending_document_frequency_then_descending_term_frequency_then_lexicographic
+      test_tokens_allowed_to_define_vocabulary: false
+
+    embeddings:
+      model_id: intfloat/multilingual-e5-base
+      model_revision: d13f1b27baf31030b7fd040960d60d909913633f
+      sentence_transformers_version: 2.7.0
+      input_template: "query: {token}"
+      normalize_embeddings: true
+      expected_width: 768
+      batch_size: 64
+
+    model:
+      topics: 10
+      encoder_units: 200
+      num_clusters: 50
+      dropout: 0.0
+      beta_temp: 0.2
+      weight_loss_ECR: 60.0
+      weight_ot_doc_cluster: 1.0
+      weight_ot_topic_cluster: 1.0
+      sinkhorn_alpha: 20.0
+      sinkhorn_max_iter: 100
+      alpha_noise: 0.001
+      alpha_augment: 0.05
+      frozen_word_feature_width: 768
+
+    training:
+      seeds: [101, 211, 307, 401, 503, 601, 701, 809, 907, 1009]
+      parent_epochs: 120
+      parent_learning_rate: 0.002
+      batch_size: 200
+      stopping_rule: fixed_epochs_only
+      validation_early_stopping: false
+      seed_selection: false
+      hyperparameter_selection: false
+
+    global_context:
+      clusters: 40
+      n_init: 10
+      seed: 20260909
+      fit_partition: external_first_475_only
+
+    lexical_graph:
+      minimum_document_frequency: 2
+      minimum_joint_documents: 1
+      reliability_power: 1.25
+      minimum_active_fraction: 0.75
+
+    graph_projection:
+      prototype_quota: 10
+      prototype_seed_offset: 5
+      centrality_weight: 0.5
+      minimum_cluster_size: 10
+      rank_margin: 1.0e-5
+      strength: 1.0
+
+    calibration:
+      variance_floor: 1.0e-10
+      change_tolerance: 0.0
+
+    pooled_backoff:
+      pseudocount: 0.5
+      mixture_weight: 0.35
+
+    completion:
+      seed: 20260913
+      observed_fraction: 0.5
+      minimum_total_tokens: 2
+      temporal_blocks: 3
+      temporal_block_rule: equal_count_contiguous_blocks_after_chronological_sort
+
+    established:
+      lda: {maximum_iterations: 100, maximum_doc_iterations: 100, document_tolerance: 0.001}
+      nmf: {initialization: nndsvdar, maximum_iterations: 500, tolerance: 0.0001}
+      gsdmm: {alpha: 0.1, beta: 0.01, maximum_iterations: 100, stable_iterations: 5}
+      btm: {alpha: 5.0, beta: 0.01, window_size: 15, maximum_iterations: 100, stable_iterations: 3}
+      bertopic: {reduced_dimensions: 5, kmeans_starts: 10, kmeans_maximum_iterations: 300, top_n_words: 10}
+      combinedtm: {model_type: prodLDA, hidden_sizes: [100, 100], activation: softplus, dropout: 0.2, learn_priors: true, batch_size: 64, learning_rate: 0.002, momentum: 0.99, epochs: 100, theta_samples: 20}
+
+    recent_sota:
+      enabled: true
+      source_project_root: ../SC-HTM
+      fastopic: {epochs: 200, learning_rate: 0.002, DT_alpha: 3.0, TW_alpha: 2.0, theta_temp: 1.0, normalize_embeddings: false}
+      glocom: {epochs: 200, batch_size: 200, learning_rate: 0.002, aug_coef: 0.5, prior_var: 0.1, weight_loss_ECR: 60.0, global_context_clusters: 40}
+      encot: {epochs: 200, batch_size: 200, learning_rate: 0.002, dropout: 0.0, beta_temp: 0.2, weight_loss_ECR: 60.0, weight_ot_doc_cluster: 1.0, weight_ot_topic_cluster: 1.0, sinkhorn_alpha: 20.0, sinkhorn_max_iter: 100, alpha_noise: 0.001, alpha_augment: 0.05, num_clusters: 50, global_context_clusters: 40}
+      neuromax: {epochs: 500, batch_size: 200, learning_rate: 0.002, lr_scheduler: StepLR, lr_step_size: 125, dropout: 0.2, beta_temp: 0.2, weight_loss_ECR: 40.0, weight_loss_GR: 1.0, alpha_ECR: 20.0, alpha_GR: 5.0, weight_loss_InfoNCE: 50.0, sinkhorn_max_iter: 1000, num_groups: 4}
+
+    evaluation:
+      top_words: 10
+      c_v_window_size: 110
+      c_v_gamma: 1.0
+      probability_floor: 1.0e-12
+      primary_predictive_metric: macro_temporal_block_nll_per_token
+      secondary_predictive_metric: micro_nll_per_token
+      no_city_metric_reason: external_dataset_has_no_audited_city_identifier
+
+    statistics:
+      bootstrap_resamples: 10000
+      bootstrap_seed: 20260913
+      confidence_level: 0.95
+      paired_test: exact_two_sided_wilcoxon_signed_rank
+      multiplicity: holm_within_metric
+      alpha: 0.05
+
+    policy:
+      install_or_upgrade_packages: false
+      internal_corpus_used_for_external_fit: false
+      internal_numeric_results_used_for_selection: false
+      labels_available_to_models: false
+      coordinates_available_to_models: false
+      test_tokens_define_vocabulary: false
+      test_target_available_to_fit_or_inference: false
+      target_half_available_to_fit_or_inference: false
+      test_text_available_to_fit: false
+      test_conditioned_preprocessing_change_allowed: false
+      hyperparameter_change_after_results_allowed: false
+      seed_selection_allowed: false
+      hyperparameter_selection_allowed: false
+      drop_failed_seeds_allowed: false
+      failed_seed_omission_allowed: false
+      unfavorable_result_omission_allowed: false
+      exact_state_performance_claim_under_language_mismatch_allowed: false
+      exact_state_cross_language_performance_claim_allowed: false

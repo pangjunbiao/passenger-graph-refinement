@@ -1,0 +1,155 @@
+schema_version: 1
+
+v6:
+  step7:
+    scope: final_train_plus_spent_development_refit_pretest_freeze_no_test_labels_or_comparators
+    implementation_version: v6_1_step7_final_development_refit_freeze_r1
+
+    prerequisite:
+      implementation_version: v6_1_step6r2_spent_validation_development_recovery_r1
+      readiness: READY_FOR_V6_1_FINAL_REFIT_AND_ONE_SHOT_TEST
+      data_key: 7774658044d3e297ed5bff31a45bcad5221228a53fe48fd5aabacebf12778c2d
+      official_commit: 8ac3592165cc7851676be2776b314eb6e44e9388
+      configuration_fingerprint: 73904363114be2afb42067bcc6103e45a1b3a1ed77492a8a531301ce8ff52403
+
+    confirmation_preregistration:
+      path: docs/V6_1_STEP08_09_CONFIRMATION_PREREGISTRATION.json
+      sha256: 7b24464275efdd177d9f4dcd89e054364dd65bc6ad17bf947aa027f572c1ddb0
+      frozen_before_test: true
+
+    runtime:
+      source: exact_interpreter_recorded_by_passing_step6r2
+      creation_or_installation_allowed: false
+
+    data_policy:
+      original_validation_status: SPENT_DEVELOPMENT
+      original_validation_confirmation_claim_allowed: false
+      test_available_to_worker: false
+      labels_available_to_worker: false
+      comparators_available_to_worker: false
+      test_action_on_pass: KEEP_SEALED_UNTIL_SEPARATE_STEP8
+      test_action_on_failure: KEEP_SEALED
+
+    final_fit:
+      construction: stable_concat_original_train_then_all_spent_validation
+      original_training_documents: 620
+      spent_development_documents: 75
+      documents: 695
+      original_training_tokens: 6335
+      spent_development_tokens: 609
+      tokens: 6944
+      vocabulary: 1148
+
+    cities: [beijing, shanghai, xiamen]
+
+    selected_configuration:
+      prototype_quota: 10
+      calibration: training_moment_match
+      pooled_mixture_weight: 0.35
+      city_specific_backoff: RETIRED
+
+    global_context:
+      algorithm: sklearn.cluster.KMeans
+      clusters: 40
+      n_init: 10
+      seed: 20260909
+      fit_partition: all_695_train_plus_spent_development_rows
+      representation: l2_normalized_count_weighted_frozen_vocabulary_embeddings
+
+    model:
+      topics: 10
+      encoder_units: 200
+      num_clusters: 50
+      dropout: 0.0
+      beta_temp: 0.2
+      weight_loss_ECR: 60.0
+      weight_ot_doc_cluster: 1.0
+      weight_ot_topic_cluster: 1.0
+      sinkhorn_alpha: 20.0
+      sinkhorn_max_iter: 100
+      alpha_noise: 0.001
+      alpha_augment: 0.05
+      frozen_word_feature_width: 768
+
+    training:
+      seeds: [101, 211, 307, 401, 503, 601, 701, 809, 907, 1009]
+      parent_epochs: 120
+      parent_learning_rate: 0.002
+      batch_size: 200
+      stopping_rule: fixed_epochs_only
+      validation_early_stopping: false
+      seed_selection: false
+      hyperparameter_selection: false
+
+    pooled_backoff:
+      estimator: additive_smoothed_pooled_unigram
+      pseudocount: 0.5
+      mixture_weight: 0.35
+      fit_partition: all_695_train_plus_spent_development_rows
+      city_conditioned_parameters: 0
+
+    lexical_graph:
+      construction: support_filtered_positive_document_npmi
+      fit_partition: all_695_train_plus_spent_development_rows
+      minimum_document_frequency: 2
+      minimum_joint_documents: 1
+      reliability_power: 1.25
+      normalization: divide_by_training_maximum_edge
+      minimum_active_words: 900
+
+    graph_projection:
+      construction: spectral_partition_then_minimum_total_variation_transport
+      prototype_quota: 10
+      prototype_seed_offset: 5
+      centrality_weight: 0.5
+      minimum_cluster_size: 10
+      alignment: maximum_initial_official_reporting_mass_hungarian
+      rank_margin: 1.0e-5
+      strength: 1.0
+      nonprototype_identity: exact
+
+    calibration:
+      construction: changed_column_training_logit_moment_matching
+      fit_partition: all_695_train_plus_spent_development_rows
+      variance_floor: 1.0e-10
+      change_tolerance: 0.0
+      validation_or_test_fit_allowed: false
+
+    ablations:
+      common_parent_per_seed: true
+      rationale: deterministic_postfit_modules_do_not_change_parent_objective
+      variants:
+        - full_graph_calibration_pooled
+        - without_graph_pooled_retained
+        - without_pooled_graph_calibration_retained
+        - without_calibration_graph_pooled_retained
+        - exact_official_parent
+
+    evaluation:
+      top_words: 10
+      c_v_window_size: 110
+      c_v_gamma: 1.0
+      projection_epsilon: 1.0e-12
+      inference_batch_size: 200
+      development_quality_metrics_are_fit_diagnostics_not_confirmation: true
+
+    integrity_gates:
+      maximum_projection_column_sum_error: 1.0e-6
+      minimum_projection_probability: 0.0
+      maximum_projection_optimality_error: 1.0e-12
+      maximum_nonprototype_change: 0.0
+      minimum_prototype_core_recall: 1.0
+      maximum_calibration_moment_error: 1.0e-12
+      maximum_calibration_unchanged_identity_error: 0.0
+      maximum_calibration_scale: 10.0
+      maximum_pooled_probability_sum_error: 1.0e-12
+
+    prohibited:
+      test_counts_or_text_used: 0
+      test_embeddings_used: 0
+      human_labels_used: 0
+      baseline_outputs_used: 0
+      sota_outputs_used: 0
+      seed_selection: 0
+      validation_early_stopping: 0
+      package_install_commands: 0

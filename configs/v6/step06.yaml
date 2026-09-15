@@ -1,0 +1,165 @@
+schema_version: 1
+
+v6:
+  step6:
+    scope: frozen_three_seed_train_only_fit_single_validation_open_no_test_or_comparators
+    implementation_version: v6_step6_one_shot_validation_freeze_gate_r1
+
+    preregistration:
+      path: docs/V6_STEP06_VALIDATION_PREREGISTRATION.json
+      sha256: dda65fa164e200864ace971cc9dae1f4c35ab6a30c9578cdad6408bcfcf176ae
+      frozen_before_validation: true
+
+    prerequisite:
+      implementation_version: v6_step5r2_target_aligned_graph_projection_gate_r5
+      readiness: READY_FOR_V6_STEP6_VALIDATION_GATE
+      data_key: 7774658044d3e297ed5bff31a45bcad5221228a53fe48fd5aabacebf12778c2d
+      official_commit: 8ac3592165cc7851676be2776b314eb6e44e9388
+      selected_city_mixture_weight: 0.35
+      selected_prototype_quota: 10
+
+    step3_prerequisite:
+      implementation_version: v6_step3_official_encot_exact_bridge_r1
+      data_key: 7774658044d3e297ed5bff31a45bcad5221228a53fe48fd5aabacebf12778c2d
+      official_commit: 8ac3592165cc7851676be2776b314eb6e44e9388
+
+    runtime:
+      creation_or_installation_allowed: false
+      source: exact_interpreter_recorded_by_passing_step3
+
+    cities: [beijing, shanghai, xiamen]
+
+    global_context:
+      algorithm: sklearn.cluster.KMeans
+      clusters: 40
+      n_init: 10
+      seed: 20260909
+      fit_partition: all_620_original_training_rows_only
+      representation: l2_normalized_count_weighted_frozen_vocabulary_embeddings
+      validation_assignment: nearest_frozen_training_centroid_from_observed_half_only
+
+    model:
+      topics: 10
+      encoder_units: 200
+      num_clusters: 50
+      dropout: 0.0
+      beta_temp: 0.2
+      weight_loss_ECR: 60.0
+      weight_ot_doc_cluster: 1.0
+      weight_ot_topic_cluster: 1.0
+      sinkhorn_alpha: 20.0
+      sinkhorn_max_iter: 100
+      alpha_noise: 0.001
+      alpha_augment: 0.05
+      frozen_word_feature_width: 768
+
+    training:
+      seeds: [20260910, 20270910, 20280910]
+      parent_epochs: 120
+      parent_learning_rate: 0.002
+      batch_size: 200
+      stopping_rule: fixed_epochs_only
+      validation_early_stopping: false
+      seed_selection: false
+      hyperparameter_selection: false
+
+    city_backoff:
+      estimator: empirical_bayes_partially_pooled_unigram
+      fit_partition: all_620_original_training_rows_only
+      fixed_mixture_weight: 0.35
+      fixed_shrinkage: 0.5
+      fixed_pseudocount: 0.5
+      matched_control: same_weight_city_prior_replaced_by_pooled_prior
+
+    lexical_graph:
+      construction: support_filtered_positive_document_npmi_on_all_original_training_rows
+      minimum_document_frequency: 2
+      minimum_joint_documents: 1
+      reliability_power: 1.25
+      normalization: divide_by_training_maximum_edge
+      minimum_active_words: 900
+
+    graph_prototype_projection:
+      construction: spectral_partition_then_deterministic_cohesive_core
+      spectral_assign_labels: cluster_qr
+      spectral_eigen_solver: arpack
+      centrality_weight: 0.5
+      minimum_cluster_size: 10
+      prototype_seed_offset: 5
+      alignment: maximum_initial_official_reporting_mass_hungarian
+      optimization: closed_form_no_gradient_no_optimizer_no_epoch_selection
+      placement: minimum_total_variation_transport_on_word_topic_simplex_before_decoder_and_reporting
+      modified_support: aligned_disjoint_prototype_columns_only
+      nonprototype_identity: exact
+      rank_margin: 1.0e-5
+      selected_prototype_quota: 10
+      strength: 1.0
+
+    validation:
+      semantic_open_count: 1
+      expected_source_documents: 75
+      expected_completion_documents: 73
+      expected_target_tokens: 310
+      load_after_all_training_checkpoints_frozen: true
+      candidate_count: 1
+      seed_selection_allowed: false
+      hyperparameter_selection_allowed: false
+      on_failure: stop_current_v6_do_not_open_test_or_comparators
+
+    evaluation:
+      variants:
+        - full_graph_plus_city
+        - without_graph_city_retained
+        - without_city_graph_retained
+        - matched_pooled_backoff_graph_retained
+        - exact_official_parent
+      top_words: 10
+      c_v_window_size: 110
+      c_v_gamma: 1.0
+      probability_floor: 1.0e-12
+      projection_epsilon: 1.0e-12
+      inference_batch_size: 200
+      validation_quality_reference: frozen_73_row_validation_completion_cohort_full_counts
+      training_quality_reference: all_620_original_training_counts_diagnostic_only
+      completion_inference: validation_observed_half_only
+      completion_scoring: validation_target_half_only
+      city_aggregation: equal_weight_macro_average_of_city_specific_token_nll
+      same_affinity_for_likelihood_and_reporting: true
+      graph_ablation_nll: mandatory_reported_tradeoff_not_gate
+
+    gates:
+      expected_seed_count: 3
+      minimum_positive_seed_fraction: 0.6666666666666666
+      minimum_median_validation_npmi_improvement: 0.05
+      minimum_median_validation_cv_improvement: 0.02
+      minimum_median_zero_joint_pair_reduction: 0.0
+      minimum_median_city_vs_without_city_reduction: 0.05
+      minimum_median_city_vs_pooled_reduction: 0.005
+      minimum_median_full_vs_parent_reduction: 0.05
+      minimum_median_training_reference_npmi: -0.05
+      minimum_median_training_reference_cv: 0.48
+      minimum_validation_topic_diversity: 0.85
+      maximum_validation_top_word_redundancy: 0.15
+      minimum_full_topic_stability: 0.2
+      maximum_stability_regression_vs_graph_removed: 0.02
+      minimum_displayed_train_support_fraction: 0.85
+      minimum_displayed_graph_support_fraction: 0.8
+      minimum_displayed_positive_graph_pair_fraction: 0.15
+      minimum_prototype_core_recall: 1.0
+      maximum_probability_sum_error: 1.0e-6
+      maximum_nonprototype_change: 0.0
+      maximum_projection_column_sum_error: 1.0e-6
+      minimum_projection_probability: 0.0
+      maximum_projection_optimality_error: 1.0e-12
+      maximum_changed_columns: 100
+
+    prohibited:
+      architecture_candidates: 1
+      validation_hyperparameter_searches: 0
+      validation_seed_selection: 0
+      validation_early_stopping: 0
+      test_counts_or_text_used: 0
+      human_labels_used: 0
+      baseline_outputs_used: 0
+      sota_outputs_used: 0
+      package_install_commands: 0

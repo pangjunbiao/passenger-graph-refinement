@@ -1,0 +1,2 @@
+# Step 7 installs nothing. It reuses the exact CUDA interpreter frozen by Step 3
+# and most recently verified by the passing Step 6R2 run.

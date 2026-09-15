@@ -1,0 +1,164 @@
+schema_version: 1
+
+v6:
+  step5r2:
+    scope: grouped_original_train_frozen_parent_target_aligned_graph_projection_development_freeze_no_validation_test_or_comparators
+    implementation_version: v6_step5r2_target_aligned_graph_projection_gate_r5
+
+    revision_basis:
+      predecessor: v6_step5r2_minimum_distortion_graph_projection_gate_r4
+      observed_failure: no_projection_quota_can_jointly_satisfy_the_r4_coherence_target_and_graph_ablation_nll_noninferiority_requirements
+      unchanged_firewall: original_training_rows_only_no_validation_test_labels_baselines_or_sota
+      mechanism_change: none_r5_reuses_the_exact_r4_projection_and_candidate_grid
+      numeric_target_threshold_changes: none
+      selection_semantics_change: graph_removed_nll_is_a_mandatory_reported_tradeoff_not_a_graph_component_survival_gate
+      confirmation_boundary: r5_must_be_frozen_before_any_validation_access
+      audit_receipt: docs/V6_STEP05R2_R4_FAILURE_AND_R5_SELECTION_AUDIT.json
+      audit_receipt_sha256: 13408352a759687c4a835ed12938bca26a28f7d890562d3743423992a9cb82d3
+
+    prerequisite:
+      implementation_version: v6_step4r2_hierarchical_city_backoff_gate_r1
+      readiness: READY_FOR_V6_STEP5R2_RANK_AWARE_LEXICAL_INTEGRATION
+      data_key: 7774658044d3e297ed5bff31a45bcad5221228a53fe48fd5aabacebf12778c2d
+      official_commit: 8ac3592165cc7851676be2776b314eb6e44e9388
+      selected_mixture_weight: 0.35
+
+    step3_prerequisite:
+      implementation_version: v6_step3_official_encot_exact_bridge_r1
+      data_key: 7774658044d3e297ed5bff31a45bcad5221228a53fe48fd5aabacebf12778c2d
+      official_commit: 8ac3592165cc7851676be2776b314eb6e44e9388
+
+    runtime:
+      creation_or_installation_allowed: false
+      source: exact_interpreter_recorded_by_passing_step3
+
+    seed: 20260915
+    cities: [beijing, shanghai, xiamen]
+    development_folds: [0, 1, 2, 3, 4]
+
+    global_context:
+      algorithm: sklearn.cluster.KMeans
+      clusters: 40
+      n_init: 10
+      seed: 20260909
+      fit_partition: corresponding_fold_training_side_only
+      representation: l2_normalized_count_weighted_frozen_vocabulary_embeddings
+      heldout_assignment: nearest_frozen_fold_training_centroid_from_observed_counts_only
+
+    model:
+      topics: 10
+      encoder_units: 200
+      num_clusters: 50
+      dropout: 0.0
+      beta_temp: 0.2
+      weight_loss_ECR: 60.0
+      weight_ot_doc_cluster: 1.0
+      weight_ot_topic_cluster: 1.0
+      sinkhorn_alpha: 20.0
+      sinkhorn_max_iter: 100
+      alpha_noise: 0.001
+      alpha_augment: 0.05
+      frozen_word_feature_width: 768
+
+    city_backoff:
+      formulation: normalized_convex_mixture
+      estimator_name_for_manuscript: fixed_shrinkage_partially_pooled_city_unigram
+      fixed_mixture_weight: 0.35
+      fixed_shrinkage: 0.50
+      fixed_pseudocount: 0.50
+      trainable_in_step5r2: false
+      matched_control: same_weight_city_prior_replaced_by_pooled_prior
+
+    lexical_graph:
+      construction: support_filtered_positive_document_npmi_on_corresponding_fold_training_rows_only
+      minimum_document_frequency: 2
+      minimum_joint_documents: 1
+      reliability_power: 1.25
+      normalization: divide_by_fold_maximum_edge
+      minimum_active_words: 900
+
+    graph_prototype_projection:
+      construction: spectral_partition_then_deterministic_cohesive_core
+      spectral_assign_labels: cluster_qr
+      spectral_eigen_solver: arpack
+      centrality_weight: 0.50
+      minimum_cluster_size: 10
+      alignment: maximum_initial_official_reporting_mass_hungarian
+      parent_state: exact_frozen_passing_step4r2_checkpoint
+      optimization: closed_form_no_gradient_no_optimizer_no_epoch_selection
+      placement: minimum_total_variation_transport_on_word_topic_simplex_before_decoder_and_reporting
+      modified_support: aligned_disjoint_prototype_columns_only
+      nonprototype_identity: exact
+      zero_strength_identity: exact_official_parent
+      rank_margin: 1.0e-5
+      candidate_prototype_quotas: [8, 9, 10]
+      selection_rule: smallest_predeclared_quota_passing_all_target_integrity_city_and_parent_benefit_gates
+
+    ablation_interpretation:
+      graph_module_primary_targets: [npmi_at_10, c_v_at_10, zero_joint_pair_reduction, topic_stability]
+      city_module_primary_target: macro_city_completion_nll
+      graph_removed_nll_comparison: mandatory_reported_tradeoff_not_selection_gate
+      complete_model_predictive_guardrails: [city_vs_matched_pooling_effect, city_vs_official_parent_effect]
+      manuscript_requirement: report_every_metric_for_full_and_all_ablations_without_claiming_per_metric_dominance
+
+    evaluation:
+      top_words: 10
+      c_v_window_size: 110
+      c_v_gamma: 1.0
+      probability_floor: 1.0e-12
+      projection_epsilon: 1.0e-12
+      inference_batch_size: 200
+      strict_quality_reference: corresponding_fold_evaluation_counts_only
+      standard_quality_reference: all_620_original_training_counts_development_only
+      completion_inference: observed_half_only
+      completion_scoring: target_half_only
+      city_aggregation: equal_weight_macro_average_of_city_specific_token_nll
+      same_affinity_for_likelihood_and_reporting: true
+
+    gates:
+      step4r2_reproduction_tolerance: 1.0e-7
+      probability_tolerance: 1.0e-6
+      minimum_median_heldout_npmi_improvement: 0.075
+      minimum_positive_npmi_fold_fraction: 0.80
+      minimum_median_heldout_cv_improvement: 0.025
+      minimum_positive_cv_fold_fraction: 0.60
+      minimum_median_heldout_npmi: -0.85
+      minimum_median_standard_reference_npmi: -0.05
+      minimum_median_standard_reference_cv: 0.48
+      minimum_median_zero_joint_pair_reduction: 20
+      minimum_displayed_train_support_fraction: 0.85
+      minimum_displayed_graph_support_fraction: 0.80
+      minimum_displayed_positive_graph_pair_fraction: 0.15
+      minimum_median_city_vs_pooled_reduction: 0.005
+      minimum_positive_city_vs_pooled_fold_fraction: 0.80
+      minimum_median_city_vs_parent_reduction: 0.050
+      minimum_positive_city_vs_parent_fold_fraction: 1.00
+      minimum_topic_diversity: 0.85
+      maximum_top_word_redundancy: 0.15
+      minimum_cross_fold_topic_stability: 0.20
+      maximum_stability_regression_vs_paired_control: 0.02
+      minimum_prototype_core_recall: 1.00
+      maximum_zero_strength_identity_error: 0.0
+      maximum_nonprototype_change: 0.0
+      maximum_projection_column_sum_error: 1.0e-6
+      minimum_projection_probability: 0.0
+      maximum_projection_optimality_error: 1.0e-12
+      maximum_changed_columns: 100
+
+    reported_graph_ablation_nll_tradeoff:
+      required: true
+      affects_candidate_eligibility: false
+      rationale: graph_projection_is_retained_for_coherence_while_city_backoff_is_the_predictive_module
+      r4_reference_maximum_median_completion_nll_regression: 0.030
+      r4_reference_maximum_any_fold_completion_nll_regression: 0.080
+      r4_reference_maximum_median_nll_regression_vs_step4r2: 0.020
+      r4_reference_maximum_any_fold_nll_regression_vs_step4r2: 0.050
+
+    prohibited:
+      step4r1_city_residual_reuse: 0
+      validation_rows_used: 0
+      test_counts_or_text_used: 0
+      human_labels_used: 0
+      baseline_outputs_used: 0
+      sota_outputs_used: 0
+      package_install_commands: 0

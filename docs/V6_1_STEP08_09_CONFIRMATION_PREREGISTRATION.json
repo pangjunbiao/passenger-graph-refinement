@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "registration_status": "FROZEN_BEFORE_ANY_V6_1_TEST_ACCESS",
+  "method_version": "V6.1",
+  "development_disclosure": {
+    "original_validation_status": "SPENT_DEVELOPMENT_AFTER_STEP6_AND_STEP6R2",
+    "legacy_v4_comparator_scores_were_known_to_the_researcher": true,
+    "legacy_v4_scores_may_not_select_or_modify_v6_1": true,
+    "legacy_v4_620_row_comparator_fits_may_not_be_reused_as_fair_695_row_final_comparators": true
+  },
+  "final_fit": {
+    "documents": 695,
+    "composition": "620_original_train_plus_75_spent_validation",
+    "test_documents": 0
+  },
+  "final_seeds": [101, 211, 307, 401, 503, 601, 701, 809, 907, 1009],
+  "full_and_ablation_variants": [
+    "full_graph_calibration_pooled",
+    "without_graph_pooled_retained",
+    "without_pooled_graph_calibration_retained",
+    "without_calibration_graph_pooled_retained",
+    "exact_official_parent"
+  ],
+  "step8_confirmation": {
+    "test_open_count": 1,
+    "test_completion_construction": "post_id_hashed_binomial_observed_target_split_with_nonempty_repair",
+    "test_completion_seed": 20260908,
+    "test_model_input": "observed_half_only",
+    "test_scoring": "target_half_only",
+    "quality_reference": "same_695_document_final_fit_counts_for_every_method_and_ablation",
+    "predictive_reference": "same_untouched_test_completion_rows_for_every_predictive_method_and_ablation",
+    "city_aggregation": "equal_city_macro_for_predictive_nll_plus_micro_nll_as_secondary",
+    "no_seed_selection": true,
+    "no_test_early_stopping": true,
+    "no_post_test_model_change": true
+  },
+  "ablation_hypotheses": [
+    {
+      "contrast": "full_graph_calibration_pooled_minus_without_graph_pooled_retained",
+      "primary_endpoints": ["npmi_at_10", "c_v_at_10"],
+      "expected_direction": "full_higher",
+      "interpretation": "incremental graph-transport value; predictive NLL is a mandatory reported tradeoff"
+    },
+    {
+      "contrast": "full_graph_calibration_pooled_minus_without_pooled_graph_calibration_retained",
+      "primary_endpoints": ["test_completion_nll_per_token"],
+      "expected_direction": "full_lower",
+      "interpretation": "incremental pooled lexical-backoff value"
+    },
+    {
+      "contrast": "full_graph_calibration_pooled_minus_without_calibration_graph_pooled_retained",
+      "primary_endpoints": ["test_completion_nll_per_token"],
+      "expected_direction": "full_lower",
+      "interpretation": "incremental training-only transport-calibration value"
+    },
+    {
+      "contrast": "full_graph_calibration_pooled_minus_exact_official_parent",
+      "primary_endpoints": ["npmi_at_10", "c_v_at_10", "test_completion_nll_per_token"],
+      "expected_direction": "full_higher_quality_and_lower_nll",
+      "interpretation": "joint extension value over the attributed EnCOT parent"
+    }
+  ],
+  "guardrails": {
+    "topic_diversity_at_10_minimum": 0.85,
+    "top_word_redundancy_at_10_maximum": 0.15,
+    "all_seed_results_retained": true,
+    "all_cross_metric_losses_reported": true,
+    "graph_nll_may_be_negative_but_must_be_disclosed": true
+  },
+  "statistics": {
+    "paired_unit": "same_reporting_seed",
+    "seed_count": 10,
+    "point_summary": "mean_and_sample_standard_deviation",
+    "interval": "seed_bootstrap_95_percent_confidence_interval",
+    "paired_test": "two_sided_exact_wilcoxon_signed_rank_when_defined",
+    "multiplicity": "holm_familywise_correction_within_ablation_and_comparator_families",
+    "alpha": 0.05,
+    "effect_sizes_and_per_seed_values_required": true
+  },
+  "step9_comparators": {
+    "established": ["LDA", "NMF", "GSDMM", "BTM", "BERTopic", "CombinedTM"],
+    "recent_sota": ["FASTopic", "GloCOM", "EnCOT", "NeuroMax"],
+    "fit_partition": "same_695_document_final_fit_partition",
+    "test_partition": "same_untouched_test_completion_partition",
+    "topic_count": 10,
+    "reporting_seeds": [101, 211, 307, 401, 503, 601, 701, 809, 907, 1009],
+    "official_defaults_policy": "official_defaults_except_predeclared_common_input_topic_count_and_seed_adapters",
+    "metric_unavailable_policy": "report_not_applicable_never_impute",
+    "model_selection_from_comparator_results": false
+  },
+  "success_semantics": {
+    "no_claim_that_every_module_must_win_every_metric": true,
+    "module_claim_requires_its_prespecified_primary_target": true,
+    "overall_comparator_claim_requires_metric_specific_evidence": true,
+    "no_single_composite_score_created_after_results": true
+  },
+  "failure_policy": "REPORT_WITHOUT_TEST_CONDITIONED_MODEL_CHANGE"
+}

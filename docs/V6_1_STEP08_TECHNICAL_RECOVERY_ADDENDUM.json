@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "event": "STEP08_R1_EXPECTED_DOCUMENT_COUNT_MISMATCH",
+  "classification": "technical_protocol_metadata_correction_after_source_open_before_model_evaluation",
+  "failure_signature": {
+    "exception": "ValueError",
+    "message": "the test count matrix has an unexpected shape",
+    "failed_implementation": "v6_1_step8_one_shot_test_confirmation_r1",
+    "failed_expected_source_documents": 78
+  },
+  "frozen_preexisting_evidence": {
+    "step2_data_key": "7774658044d3e297ed5bff31a45bcad5221228a53fe48fd5aabacebf12778c2d",
+    "step2_split_metadata_sha256": "b4277f72f613902cf068b80f190150384e1c16af78b4456e5b12bacfe0270a1b",
+    "test_assignments_before_model_exclusions": 78,
+    "modeled_test_assignments": 77,
+    "test_assignments_excluded_before_matrix_construction": 1,
+    "step2_test_count_rows_loaded": 0,
+    "legacy_v4_test_matrix_shape": [
+      77,
+      1148
+    ],
+    "legacy_v4_test_matrix_sparse_logical_sha256": "157d161e601b2454a1f5047ad8a735bdc227ed8c3529dc76c7dbefb0c489fb95"
+  },
+  "correction": {
+    "incorrect_quantity": "test_assignment_metadata_rows_before_model_exclusions",
+    "correct_quantity": "modeled_test_count_matrix_rows_after_preprocessing_exclusions",
+    "expected_source_documents_before": 78,
+    "expected_source_documents_after": 77,
+    "expected_vocabulary_unchanged": 1148,
+    "model_hyperparameters_changed": false,
+    "checkpoints_changed": false,
+    "variants_changed": false,
+    "hypotheses_changed": false,
+    "statistics_changed": false,
+    "guardrails_changed": false
+  },
+  "access_accounting": {
+    "prior_failed_source_openings": 1,
+    "prior_evaluative_confirmations": 0,
+    "prior_test_metrics_computed": 0,
+    "prior_model_evaluations": 0,
+    "prior_model_updates": 0,
+    "authorized_recovery_source_openings": 1,
+    "authorized_recovery_evaluative_confirmations": 1,
+    "cumulative_source_openings_after_success": 2,
+    "cumulative_evaluative_confirmations_after_success": 1
+  },
+  "recovery_policy": {
+    "preserve_failed_output_as_audit_evidence": true,
+    "require_exact_failed_job_and_state_hashes": true,
+    "require_exact_failure_signature": true,
+    "require_absence_of_completion_metrics_and_handoff": true,
+    "require_step2_metadata_reproduction_before_test_reopen": true,
+    "require_legacy_matrix_logical_identity_after_test_reopen": true,
+    "allow_test_conditioned_model_change": false,
+    "allow_seed_selection": false,
+    "allow_test_early_stopping": false,
+    "allow_comparator_access": false,
+    "allow_label_access": false
+  }
+}

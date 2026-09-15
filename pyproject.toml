@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=65"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "likelihood-coupled-graph-prototype-refinement"
+version = "0.8.0"
+description = "Research code for likelihood-coupled graph-prototype refinement for passenger-requirement discovery from social media."
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

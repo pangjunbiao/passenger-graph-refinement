@@ -1,0 +1,86 @@
+schema_version: 1
+
+v6:
+  step10:
+    implementation_version: v6_1_step10_reporting_validity_gate_r3
+    scope: frozen_reporting_blinded_human_case_study_and_external_protocol
+
+    prerequisite:
+      step8_status: PASS
+      step8_readiness: READY_FOR_V6_1_STEP9_FAIR_COMPARATORS
+      step8_contract_sha256: cd82d7515a6dfd33e11a9926017861c2479e020c9dfca06441595f7566b7de4d
+      step8_contract_fingerprint: 64349962b407badec59b7637bcd6850b94bd59573487a6c963c24e5bc61be04d
+      step8_job_identity: 46c2e82e988edb9db550b760706b77c7fc7848d58229163af7a8bacbd0bcfcc5
+      step8_completion_identity: 10f67505c93fff51d6f793c4f960a2d5ac3155f517c0f34656de2f32c2bf1ab4
+      step9_status: PASS
+      step9_readiness: READY_FOR_V6_1_STEP10_EXTERNAL_HUMAN_AND_PAPER_OUTPUTS
+      step9_contract_sha256: b027ffd8cd0950bd983c74015362cd47b035d91df9c56db55db77a6fffe1a179
+      step9_contract_fingerprint: 7b3b33437fa682c0941c3c042a2a1665efa3c5c76e6a935eb8a66611af836827
+      step9_evaluation_identity: c65f01848361e788551f93e60c56094227b97617b8c2065b11c420d06538d30d
+      step9_receipts: 100
+
+    source_project_root: ../SC-HTM
+    expected_corpus:
+      modeled_documents: 772
+      fit_documents: 695
+      test_documents: 77
+      completion_documents: 75
+      vocabulary: 1148
+      cities: [beijing, shanghai, xiamen]
+
+    reporting:
+      seeds: [101, 211, 307, 401, 503, 601, 701, 809, 907, 1009]
+      main_table_established: [v6_1, lda, nmf, gsdmm, btm, bertopic, combinedtm]
+      main_table_recent_sota: [v6_1, fastopic, glocom, encot, neuromax]
+      main_table_ablations:
+        - full_graph_calibration_pooled
+        - without_graph_pooled_retained
+        - without_pooled_graph_calibration_retained
+        - without_calibration_graph_pooled_retained
+        - exact_official_parent
+      descriptive_single_seed: 809
+      single_seed_status: post_hoc_descriptive_supplement_only
+      uncertainty: sample_standard_deviation_across_ten_predeclared_seeds
+      primary_predictive_metric: macro_city_nll_per_token
+      secondary_predictive_metric: micro_nll_per_token
+
+    human_evaluation:
+      required_annotators: 3
+      blinded_seed: 101
+      blinded_seed_rule: first_predeclared_seed_not_best_seed
+      randomization_seed: 20260910
+      methods: [v6_1, fastopic, glocom, encot, neuromax]
+      topics_per_method: 10
+      target_words_per_intrusion_item: 5
+      intruders_per_item: 1
+      case_examples_per_topic_city: 1
+      service_categories:
+        - operations_reliability
+        - safety_security
+        - accessibility_inclusion
+        - comfort_environment
+        - staff_conduct
+        - information_communication
+        - fare_payment_digital
+        - other
+
+    external_evaluation:
+      required_for_submission_readiness: true
+      minimum_independent_datasets: 1
+      required_model_state: exact_state_compatibility_diagnostic_plus_architecture_replication
+      required_protocol: cross_language_inputs_reestimated_but_architecture_and_hyperparameters_frozen_before_outcomes
+      arbitrary_hand_entered_metric_csv_accepted: false
+
+    policy:
+      model_fit_allowed: false
+      optimizer_steps_allowed: false
+      architecture_change_allowed: false
+      hyperparameter_change_allowed: false
+      preprocessing_change_allowed: false
+      comparator_refit_allowed: false
+      seed_selection_for_main_tables_allowed: false
+      omit_unfavorable_metric_allowed: false
+      human_labels_prefilled_allowed: false
+      external_result_fabrication_allowed: false
+      test_documents_allowed_for_case_example_selection: false
+      delexicalized_text_only: true

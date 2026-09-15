@@ -1,0 +1,7 @@
+Step 13 installs nothing.
+
+It reuses the already verified project environment for established baselines,
+the exact Step-7 EnCOT CUDA runtime for SC-HTM, and the exact Step-9 official
+recent-SOTA runtimes. The pinned multilingual-e5-base model snapshot may be
+downloaded by sentence-transformers if that immutable snapshot is not already
+in the local cache; no Python package is installed or changed.

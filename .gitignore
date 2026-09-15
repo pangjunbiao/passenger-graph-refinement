@@ -1,0 +1,126 @@
+# ============================================================
+# Python
+# ============================================================
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# ============================================================
+# Virtual environments
+# ============================================================
+.venv/
+venv/
+env/
+ENV/
+conda-env/
+.python-version
+
+# ============================================================
+# IDE / editor / OS
+# ============================================================
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ============================================================
+# Local secrets / credentials
+# ============================================================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials.json
+secrets.*
+!SECURITY.md
+
+# ============================================================
+# Research inputs
+#
+# Raw/restricted datasets and human-response files must not
+# be committed. Keep only the documentation placeholder.
+# ============================================================
+inputs/**
+!inputs/README.md
+!inputs/.gitkeep
+
+data/
+datasets/
+raw_data/
+private_data/
+restricted_data/
+
+# ============================================================
+# Generated experiment material
+# ============================================================
+outputs/
+results/
+runs/
+logs/
+checkpoints/
+cache/
+tmp/
+temp/
+
+# ============================================================
+# Model/data binaries
+# ============================================================
+*.pt
+*.pth
+*.ckpt
+*.bin
+*.safetensors
+*.pkl
+*.pickle
+*.joblib
+*.npy
+*.npz
+*.parquet
+*.feather
+
+# ============================================================
+# Archives
+# ============================================================
+*.zip
+*.7z
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+
+# ============================================================
+# Potentially identifying/raw tabular data
+# ============================================================
+*.csv
+*.tsv
+*.xlsx
+*.xls
+*.jsonl
+
+# Allow curated publication artifacts only when deliberately
+# placed under artifacts/.
+!artifacts/
+!artifacts/**
+!docs/
+
+# ============================================================
+# Third-party local checkouts
+# ============================================================
+third_party/
+external/
+vendor/
+
+# ============================================================
+# Local release backups
+# ============================================================
+*_BACKUP/
+release_backup/

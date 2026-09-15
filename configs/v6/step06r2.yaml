@@ -1,0 +1,98 @@
+schema_version: 1
+v6:
+  step6r2:
+    implementation_version: v6_1_step6r2_spent_validation_development_recovery_r1
+    scope: spent_validation_transparent_model_selection_no_test_no_labels_no_comparators
+    runtime:
+      reuse_failed_step6_exact_runtime: true
+      creation_or_installation_allowed: false
+    prerequisite:
+      implementation_version: v6_step6_one_shot_validation_freeze_gate_r1
+      status: FAIL
+      readiness: BLOCKED_DO_NOT_OPEN_TEST_OR_COMPARATORS
+      data_key: 7774658044d3e297ed5bff31a45bcad5221228a53fe48fd5aabacebf12778c2d
+      official_commit: 8ac3592165cc7851676be2776b314eb6e44e9388
+      exact_failed_checks:
+        - city_vs_matched_pooling_practical_effect
+        - city_vs_matched_pooling_seed_consistency
+        - complete_model_vs_official_parent_practical_effect
+    data_policy:
+      validation_status: SPENT_DEVELOPMENT
+      validation_semantic_access_number: 2
+      validation_confirmation_claim_allowed: false
+      test_available_to_worker: false
+      labels_available_to_worker: false
+      baseline_or_sota_available_to_worker: false
+      test_action_on_failure: KEEP_SEALED
+      test_action_on_pass: KEEP_SEALED_UNTIL_FINAL_REFIT_CONTRACT
+    model_revision:
+      city_specific_backoff: RETIRED
+      retirement_reason: failed_matched_pooling_control_in_all_three_validation_seeds
+      replacement: training_only_pooled_lexical_backoff
+      pooled_mixture_weight: 0.35
+      graph_revision: evaluate_quota_likelihood_frontier_with_optional_training_only_decoder_moment_match
+    candidates:
+      prototype_quotas: [8, 9, 10]
+      calibrations:
+        - native_decoder
+        - training_moment_match
+      candidate_count: 6
+      parent_refits: 0
+      selection_surface: already_spent_validation_development_only
+      seed_selection: false
+    calibration:
+      construction: changed_column_training_logit_moment_matching
+      fit_partition: all_620_original_training_rows_only
+      variance_floor: 1.0e-10
+      change_tolerance: 0.0
+      validation_fit_allowed: false
+    projection:
+      strength: 1.0
+      rank_margin: 1.0e-5
+      epsilon: 1.0e-12
+      construction: closed_form_minimum_total_variation_prototype_transport
+    lexical_graph:
+      construction: support_filtered_positive_document_npmi_on_all_original_training_rows
+      minimum_document_frequency: 2
+      minimum_joint_documents: 1
+      reliability_power: 1.25
+      minimum_active_words: 900
+    evaluation:
+      top_words: 10
+      c_v_window_size: 110
+      c_v_gamma: 1.0
+      probability_floor: 1.0e-12
+      projection_epsilon: 1.0e-12
+      inference_batch_size: 200
+      city_aggregation: equal_weight_macro_average_for_evaluation_only
+      variants:
+        - full_graph_plus_pooled_backoff
+        - without_graph_pooled_backoff_retained
+        - without_pooled_backoff_graph_retained
+        - same_quota_native_decoder
+        - exact_official_parent
+    gates:
+      expected_seed_count: 3
+      minimum_positive_seed_fraction: 0.6666666666666666
+      minimum_median_validation_npmi_improvement: 0.05
+      minimum_median_validation_cv_improvement: 0.02
+      minimum_median_pooled_backoff_reduction: 0.05
+      minimum_median_full_vs_parent_reduction: 0.05
+      minimum_median_training_reference_npmi: -0.05
+      minimum_median_training_reference_cv: 0.48
+      minimum_validation_topic_diversity: 0.85
+      maximum_validation_top_word_redundancy: 0.15
+      minimum_full_topic_stability: 0.2
+      maximum_stability_regression_vs_graph_removed: 0.02
+      minimum_displayed_train_support_fraction: 0.85
+      minimum_displayed_graph_support_fraction: 0.8
+      minimum_displayed_positive_graph_pair_fraction: 0.15
+      maximum_probability_sum_error: 1.0e-6
+      maximum_nonprototype_change: 0.0
+      maximum_projection_column_sum_error: 1.0e-6
+      minimum_projection_probability: 0.0
+      maximum_projection_optimality_error: 1.0e-12
+      maximum_calibration_unchanged_identity_error: 0.0
+      maximum_calibration_moment_error: 1.0e-12
+      maximum_calibration_scale: 10.0
+      maximum_lineage_reproduction_error: 1.0e-6

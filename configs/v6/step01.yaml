@@ -1,0 +1,52 @@
+schema_version: 1
+
+v6:
+  step1:
+    scope: synthetic_math_only_no_real_data_no_selection_no_comparators
+    implementation_version: v6_step1_low_rank_city_residual_rank_aware_npmi_r1
+    seed: 20260907
+    # CPU/float64 is deliberate here: Step 1 tests equations, not speed.
+    device: cpu
+    epsilon: 1.0e-10
+
+    synthetic:
+      documents: 96
+      topics: 4
+      vocabulary: 48
+      cities: 3
+      embedding_dimension: 10
+      document_length: 90
+      initial_noise_sd: 0.35
+
+    rank_aware_lexical:
+      top_k: 10
+      temperature: 0.35
+      association: positive_npmi_training_evidence_only
+
+    # Development-only values. They are not frozen real-data hyperparameters.
+    weights:
+      lambda_pooling: 0.03
+      lambda_gate: 0.002
+      lambda_lexical: 0.08
+
+    optimizer:
+      adam_iterations: 260
+      adam_learning_rate: 0.025
+      gradient_clip_norm: 10.0
+      trace_every: 20
+      lbfgs_learning_rate: 0.50
+      lbfgs_max_iterations: 90
+      lbfgs_max_evaluations: 130
+      lbfgs_tolerance_grad: 1.0e-9
+      lbfgs_tolerance_change: 1.0e-12
+      lbfgs_history_size: 25
+
+    checks:
+      probability_tolerance: 2.0e-10
+      identity_tolerance: 2.0e-10
+      reference_tolerance: 2.0e-9
+      gradient_activity_floor: 1.0e-12
+      rank_tail_gradient_floor: 1.0e-9
+      gradcheck_temperature: 0.55
+      minimum_relative_objective_decrease: 0.005
+      maximum_final_gradient_rms: 2.0e-2

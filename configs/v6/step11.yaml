@@ -1,0 +1,56 @@
+schema_version: 1
+
+v6:
+  step11:
+    implementation_version: v6_1_step11_distinct_evidence_synthesis_r2
+    scope: frozen_distinct_mechanism_stability_case_preregistration_no_training
+
+    prerequisite:
+      step8_status: PASS
+      step8_readiness: READY_FOR_V6_1_STEP9_FAIR_COMPARATORS
+      step8_contract_sha256: cd82d7515a6dfd33e11a9926017861c2479e020c9dfca06441595f7566b7de4d
+      step8_contract_fingerprint: 64349962b407badec59b7637bcd6850b94bd59573487a6c963c24e5bc61be04d
+      step9_status: PASS
+      step9_readiness: READY_FOR_V6_1_STEP10_EXTERNAL_HUMAN_AND_PAPER_OUTPUTS
+      step9_contract_sha256: b027ffd8cd0950bd983c74015362cd47b035d91df9c56db55db77a6fffe1a179
+      step9_contract_fingerprint: 7b3b33437fa682c0941c3c042a2a1665efa3c5c76e6a935eb8a66611af836827
+      step10_implementation: v6_1_step10_reporting_validity_gate_r1
+      allowed_step10_status: [PREPARATION_PASS, PASS]
+      step10_minimum_hard_checks: 11
+      step10_required_case_items: 30
+      step7_status: PASS
+      step7_readiness: READY_FOR_V6_1_STEP8_ONE_SHOT_TEST
+      step7_freeze_identity: 2ea097a4b05f3fd25d56bc976686a89a4c405fd7720f8929cc44310e609b11a3
+
+    reporting:
+      seeds: [101, 211, 307, 401, 503, 601, 701, 809, 907, 1009]
+      reference_seed: 101
+      topics: 10
+      top_words: 10
+      rank_biased_overlap_p: 0.9
+      reporting_family: graph_transported_affinity
+      parent_reporting_family: official_parent_affinity
+      methods: [v6_1, lda, nmf, gsdmm, btm, bertopic, combinedtm, fastopic, glocom, encot, neuromax]
+      metrics:
+        - npmi_at_10
+        - c_v_at_10
+        - topic_diversity_at_10
+        - top_word_redundancy_at_10
+        - macro_city_nll_per_token
+        - micro_nll_per_token
+
+    policy:
+      model_fit_allowed: false
+      optimizer_steps_allowed: false
+      architecture_change_allowed: false
+      hyperparameter_change_allowed: false
+      preprocessing_change_allowed: false
+      comparator_refit_allowed: false
+      frozen_result_change_allowed: false
+      seed_selection_allowed: false
+      unfavorable_result_omission_allowed: false
+      human_response_invention_allowed: false
+      external_result_invention_allowed: false
+      test_text_access_allowed: false
+      performance_table_replot_allowed: false
+      descriptive_posthoc_outputs_must_be_labeled: true

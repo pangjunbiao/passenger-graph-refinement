@@ -1,0 +1,64 @@
+schema_version: 1
+
+v6:
+  step11b:
+    implementation_version: v6_1_step11b_bilingual_graph_figure_r1
+    scope: manifest_verified_bilingual_editorial_rendering_no_model_or_evidence_change
+
+    prerequisite:
+      implementation_version: v6_1_step11_distinct_evidence_synthesis_r2
+      status: PASS
+      source_seed: 101
+      topics: 10
+      frozen_result_changes: 0
+
+    outputs:
+      english: paper/figure_graph_lexical_intervention_en.svg
+      chinese: paper/figure_graph_lexical_intervention_zh.svg
+      translation_audit: supplement/graph_lexical_intervention_translation_audit.csv
+      english_is_main_paper_candidate: true
+      chinese_is_source_record: true
+
+    translation:
+      status: ai_assisted_editorial_rendering_requires_author_disclosure
+      changes_numeric_evidence: false
+      counted_as_human_judgment: false
+      mappings:
+        - topic_id: 1
+          source_zh: 空调 · 热 · 建议 · 线路 · 晚高峰
+          english: air conditioning · heat · suggestions · route · evening peak
+        - topic_id: 2
+          source_zh: 驾驶 · 按照 · 语音 · 超速 · 鸡肋
+          english: driving · compliance · voice announcements · speeding · low utility
+        - topic_id: 3
+          source_zh: 早上 · 老人 · 一天 · 突然 · 高铁
+          english: morning · older passengers · one day · suddenly · high-speed rail
+        - topic_id: 4
+          source_zh: 上车 · 下车 · 开车 · 师傅 · 真是
+          english: boarding · alighting · driving · driver · really
+        - topic_id: 5
+          source_zh: 请问 · 管理员 · 乘务 · 全程 · 使用
+          english: may I ask · administrator · onboard staff · entire trip · use
+        - topic_id: 6
+          source_zh: 手机 · 方便 · 二维码 · 一卡通 · 乘车
+          english: mobile phone · convenient · QR code · transit card · ride
+        - topic_id: 7
+          source_zh: 车上 · 左右 · 保安 · 大概 · 两天
+          english: on board · around · security guard · approximately · two days
+        - topic_id: 8
+          source_zh: 人员 · 线 · 车道 · 左转 · 强行
+          english: personnel · line · lane · left turn · forcibly
+        - topic_id: 9
+          source_zh: 谢谢 · 是否 · 一句 · 大部分 · 右边
+          english: thank you · whether · one remark · most · right side
+        - topic_id: 10
+          source_zh: 发车 · 上班 · 一辆 · 投诉 · 迟到
+          english: departure · commute · one vehicle · complaint · late
+
+    policy:
+      model_fit_allowed: false
+      optimizer_steps_allowed: false
+      test_text_access_allowed: false
+      frozen_result_change_allowed: false
+      translation_presented_as_human_evidence_allowed: false
+      source_chinese_omission_allowed: false

@@ -1,0 +1,3 @@
+# Step 8 installs nothing. It reuses the exact CUDA interpreter recorded by
+# the passing Step-7 freeze. Run scripts/run_step08.ps1 with the current V6
+# project interpreter; the worker launches the frozen interpreter itself.

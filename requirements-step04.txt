@@ -1,0 +1,6 @@
+# No installation command is permitted for V6 Step 4.
+#
+# The orchestration process uses the existing SC-HTM-V6 Python. Neural fitting
+# is delegated to the exact pre-existing CUDA interpreter recorded by the
+# passing Step-3 contract. That interpreter is re-audited before results pass.
+

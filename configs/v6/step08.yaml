@@ -1,0 +1,172 @@
+schema_version: 1
+
+v6:
+  step8:
+    scope: one_shot_v6_1_test_confirmation_full_plus_paired_ablations_no_comparators
+    implementation_version: v6_1_step8_metadata_contract_recovery_r2
+
+    prerequisite:
+      implementation_version: v6_1_step7_final_development_refit_freeze_r1
+      readiness: READY_FOR_V6_1_STEP8_ONE_SHOT_TEST
+      contract_sha256: af79c0f7646f034136232872da35c829d722a5f8fe6a817b02e21156ae8ea061
+      contract_fingerprint: 9e0ffa3e8661ad7aa94da641a7e712afbe862ac2e539f6da9e474432a6c22341
+      freeze_identity: 2ea097a4b05f3fd25d56bc976686a89a4c405fd7720f8929cc44310e609b11a3
+      checkpoint_manifest_sha256: fbae6ed9facce58c05207210a4f3133543b9793497bc20e4227cd3869d42a2bd
+      variant_manifest_identity: a03be8a99c61ee3963f410947eb903aecad64acbf13ac828b03e5047d87edb9f
+      confirmation_preregistration_sha256: 7b24464275efdd177d9f4dcd89e054364dd65bc6ad17bf947aa027f572c1ddb0
+      technical_recovery_addendum_sha256: b9ac7f586144f0bfc6bda491ad424e3be1dae365c2f2fd14d8df8976c72e43f1
+      data_key: 7774658044d3e297ed5bff31a45bcad5221228a53fe48fd5aabacebf12778c2d
+      official_commit: 8ac3592165cc7851676be2776b314eb6e44e9388
+
+    runtime:
+      source: exact_interpreter_recorded_by_passing_step7
+      creation_or_installation_allowed: false
+      cuda_required: true
+
+    data_policy:
+      v6_1_evaluative_confirmation_number: 1
+      prior_failed_test_source_openings: 1
+      prior_test_metrics_computed: 0
+      prior_model_evaluations: 0
+      cumulative_test_source_openings_after_success: 2
+      legacy_v4_test_scores_known_to_researcher: true
+      claim_globally_unseen_test_set: false
+      accurate_claim: first_v6_1_evaluative_confirmation_after_one_disclosed_pre_evaluation_shape_validation_failure
+      labels_available_to_worker: false
+      comparators_available_to_worker: false
+      model_updates_allowed: false
+      seed_selection_allowed: false
+      test_early_stopping_allowed: false
+      post_test_configuration_change_allowed: false
+      failure_policy: REPORT_WITHOUT_TEST_CONDITIONED_MODEL_CHANGE
+
+    test_source:
+      root: derive_from_frozen_step2_contract
+      counts_relative_path: data/processed/counts/X_test.npz
+      rows_relative_path: data/processed/counts/rows_test.csv
+      expected_assignment_documents_before_model_exclusions: 78
+      expected_source_documents: 77
+      expected_pre_matrix_exclusions: 1
+      expected_vocabulary: 1148
+      expected_cities: [beijing, shanghai, xiamen]
+      metadata_contract_source: frozen_step2_split_assignments_included_in_model
+      expected_legacy_v4_sparse_logical_sha256: 157d161e601b2454a1f5047ad8a735bdc227ed8c3529dc76c7dbefb0c489fb95
+
+    technical_recovery:
+      addendum_relative_path: docs/V6_1_STEP08_TECHNICAL_RECOVERY_ADDENDUM.json
+      failed_implementation: v6_1_step8_one_shot_test_confirmation_r1
+      failed_exception: ValueError
+      failed_message: the test count matrix has an unexpected shape
+      failed_expected_source_documents: 78
+      require_no_completion_snapshot: true
+      require_no_model_evaluation_metrics: true
+      preserve_failed_output: true
+
+    document_completion:
+      construction: post_id_hashed_token_binomial_with_nonempty_repair
+      seed: 20260908
+      observed_fraction: 0.50
+      minimum_total_tokens: 2
+      inference_input: observed_counts_only
+      scoring_input: target_counts_only
+      probability_floor: 1.0e-12
+
+    final_fit_reference:
+      documents: 695
+      tokens: 6944
+      vocabulary: 1148
+      composition: 620_original_train_plus_75_spent_validation
+      quality_reference: same_695_document_final_fit_counts_for_all_variants
+
+    frozen_model:
+      seeds: [101, 211, 307, 401, 503, 601, 701, 809, 907, 1009]
+      variants:
+        - full_graph_calibration_pooled
+        - without_graph_pooled_retained
+        - without_pooled_graph_calibration_retained
+        - without_calibration_graph_pooled_retained
+        - exact_official_parent
+      pooled_mixture_weight: 0.35
+      parent_neural_fits_in_step8: 0
+      optimizer_steps_in_step8: 0
+
+    evaluation:
+      top_words: 10
+      c_v_window_size: 110
+      c_v_gamma: 1.0
+      inference_batch_size: 200
+      primary_predictive_aggregation: equal_city_macro_nll
+      secondary_predictive_aggregation: micro_nll
+      quality_reference_uses_test_counts: false
+      model_selection_from_test_results: false
+
+    hypotheses:
+      - contrast_id: graph_value_npmi
+        family: ablation_primary_endpoints
+        full_variant: full_graph_calibration_pooled
+        control_variant: without_graph_pooled_retained
+        endpoint: npmi_at_10
+        direction: full_higher
+      - contrast_id: graph_value_cv
+        family: ablation_primary_endpoints
+        full_variant: full_graph_calibration_pooled
+        control_variant: without_graph_pooled_retained
+        endpoint: c_v_at_10
+        direction: full_higher
+      - contrast_id: pooled_backoff_value_nll
+        family: ablation_primary_endpoints
+        full_variant: full_graph_calibration_pooled
+        control_variant: without_pooled_graph_calibration_retained
+        endpoint: macro_city_nll_per_token
+        direction: full_lower
+      - contrast_id: calibration_value_nll
+        family: ablation_primary_endpoints
+        full_variant: full_graph_calibration_pooled
+        control_variant: without_calibration_graph_pooled_retained
+        endpoint: macro_city_nll_per_token
+        direction: full_lower
+      - contrast_id: joint_parent_value_npmi
+        family: ablation_primary_endpoints
+        full_variant: full_graph_calibration_pooled
+        control_variant: exact_official_parent
+        endpoint: npmi_at_10
+        direction: full_higher
+      - contrast_id: joint_parent_value_cv
+        family: ablation_primary_endpoints
+        full_variant: full_graph_calibration_pooled
+        control_variant: exact_official_parent
+        endpoint: c_v_at_10
+        direction: full_higher
+      - contrast_id: joint_parent_value_nll
+        family: ablation_primary_endpoints
+        full_variant: full_graph_calibration_pooled
+        control_variant: exact_official_parent
+        endpoint: macro_city_nll_per_token
+        direction: full_lower
+
+    statistics:
+      paired_unit: same_frozen_reporting_seed
+      bootstrap_resamples: 10000
+      bootstrap_seed: 20260909
+      confidence_level: 0.95
+      paired_test: exact_two_sided_signed_rank_conditional_on_absolute_ranks
+      multiplicity: holm_within_ablation_primary_endpoints
+      alpha: 0.05
+      all_seed_values_required: true
+
+    guardrails:
+      topic_diversity_at_10_minimum: 0.85
+      top_word_redundancy_at_10_maximum: 0.15
+      maximum_probability_sum_error: 1.0e-6
+      maximum_parent_probability_reproduction_error: 1.0e-6
+      parent_state_change_allowed: false
+
+    step9_handoff:
+      required_completion_artifacts:
+        - test_completion_observed.npz
+        - test_completion_target.npz
+        - test_completion_rows.csv
+        - test_completion_contract.json
+      comparator_fit_partition: same_695_document_final_fit_partition
+      comparator_test_partition: exact_step8_completion_artifacts
+      comparator_results_may_change_v6_1_model: false

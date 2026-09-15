@@ -1,0 +1,4 @@
+# Step 5R2 installs nothing. It reuses the exact CUDA interpreter recorded by
+# the passing Step 3 contract. Run scripts/run_step05r2.ps1 from the V6 root.
+# Revision 3 also reuses that interpreter's already-recorded scikit-learn 1.5.1
+# for deterministic spectral graph partitioning; do not run pip install.

@@ -1,0 +1,2 @@
+# Step 11 installs nothing. It reuses the exact Python environment that passed Steps 1-10.
+# Required packages are already part of the cumulative project: numpy, pandas, scipy, PyYAML.

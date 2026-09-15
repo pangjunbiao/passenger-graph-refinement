@@ -1,0 +1,3 @@
+# Step 11B installs nothing.
+# It reuses the exact packages already required by the cumulative V6.1 project.
+
