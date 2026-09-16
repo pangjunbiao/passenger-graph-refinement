@@ -401,10 +401,3 @@ Local experimental outputs, caches, checkpoints, raw result archives, and restri
 **Haitao Yu**
 
 ---
-
-## Associated Manuscript
-
-**Likelihood-Coupled Graph-Prototype Refinement for Discovering Passenger Requirements from Social Media**
-
-This repository accompanies the manuscript and provides the released implementation, frozen configurations, verification tests, and reproduction documentation for the reported framework.
-
