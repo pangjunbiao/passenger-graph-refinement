@@ -52,10 +52,3 @@ Raw social-media data, user identifiers, coordinates, individual human-annotatio
 
 See docs/DATASETS.md and docs/REPRODUCIBILITY.md.
 
-## Internal identifiers
-
-Some implementation files retain the historical identifier SC-HTM V6.1 where changing it could affect frozen contracts, hashes, deterministic seeds, or reproducibility.
-
-## License
-
-A software license has not yet been assigned pending final verification of code ownership and third-party terms.
